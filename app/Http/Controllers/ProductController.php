@@ -66,7 +66,12 @@ class ProductController extends Controller
         
 
         $variant_data=$request['product_variant'];
+        //print_r($variant_data);
+        //print_r($variant_data[0]['tags']);
 
+
+        $varian_id=[];
+        
         foreach ($variant_data as $value) {
             //print_r($value);
             //print_r($value['option']);
@@ -86,13 +91,57 @@ class ProductController extends Controller
                 $variant->created_at=now();
                 $variant->updated_at=now();
 
-               $variant->save();
-                echo "product_saved";
+                $variant->save();
+                $varian_id=$variant->id;
+
+               
+               
+               // echo  $varian_id;
 
             }
-
+           
         }
         
+       
+        $variant_data_price=$request['product_variant_prices'];
+        foreach ($variant_data_price as $key => $value) {
+            $variant_price= new ProductVariantPrice();
+
+
+            $str=$value['title'];
+            $str=explode('/',$str,-1);
+            $color=$str[0];
+            $size=$str[1];
+            $style=$str[2];
+
+           
+
+
+            $variant_price->product_variant_one= ProductController::variant_id($color,  $product_last_id)[0]->id;
+            $variant_price->product_variant_two= ProductController::variant_id($size,  $product_last_id)[0]->id;
+            $variant_price->product_variant_three= ProductController::variant_id($style,  $product_last_id)[0]->id;
+            $variant_price->product_variant_three= ProductController::variant_id($style,  $product_last_id)[0]->id;
+            $variant_price->price= $value['price'];
+            $variant_price->stock= $value['stock'];
+            $variant_price->created_at= now();
+            $variant_price->updated_at= now();
+            $variant_price->product_id=$product_last_id;
+            $variant_price->save();
+
+
+        
+            print_r("ok");
+
+        
+
+          
+          
+          
+         
+        }
+
+      //print_r(explode(',',$str,-1))
+       // print_r($variant_data_price);
 //==========================================================================
 
 		// if(isset($request->filePhoto)){
@@ -107,8 +156,15 @@ class ProductController extends Controller
 		// 	$products->update();
 		// 	$request->filePhoto->move(public_path('img'),$imageName);
 		// }
-       print_r($request->all());
+       //print_r($request->all());
 		//return back()->with('success','Created Successfully.');
+    }
+
+    public static function variant_id($var = null, $product_id=null)
+    {
+       $id=DB::select("select id from product_variants where variant='$var' and product_id='$product_id' order by id desc limit 1");
+       //$id=DB::select("select id from product_variants where variant='$var' order by id desc limit 1");
+       return $id;
     }
 
 
