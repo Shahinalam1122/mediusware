@@ -173,7 +173,10 @@ class ProductController extends Controller
     public function edit(Product $product)
     {
         $variants = Variant::all();
-        return view('products.edit', compact('variants'));
+        $product_variant_prices[]= ProductVariantPrice::find($product->id);
+        $product_variant_prices= DB::Select("select * from product_variant_prices where product_id='$product->id'");
+        //print_r($product_variant_prices);
+       return view('products.edit', compact('variants','product_variant_prices','product'));
     }
 
     /**
@@ -185,7 +188,17 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
-        //
+        print_r($request->all());
+        
+        // $products=new Product;
+		// $products->title=$request['title'];
+		// $products->description=$request['description'];
+		// $products->sku=$request['sku'];
+        // $products->created_at=now();
+        // $products->updated_at=now();
+        // $products->update();
+        // $product_last_id= $products->id;
+
     }
 
     /**
