@@ -115,8 +115,6 @@ class ProductController extends Controller
             $style=$str[2];
 
            
-
-
             $variant_price->product_variant_one= ProductController::variant_id($color,  $product_last_id)[0]->id;
             $variant_price->product_variant_two= ProductController::variant_id($size,  $product_last_id)[0]->id;
             $variant_price->product_variant_three= ProductController::variant_id($style,  $product_last_id)[0]->id;
@@ -128,28 +126,15 @@ class ProductController extends Controller
             $variant_price->product_id=$product_last_id;
             $variant_price->save();
 
-
-        
             print_r("ok");
 
-        
-
-          
-          
-          
-         
         }
-
-      //print_r(explode(',',$str,-1))
-       // print_r($variant_data_price);
-//==========================================================================
 
 		// if(isset($request->filePhoto)){
 		// $products->photo=$request->filePhoto;
 		// }
 
 		
-
 		// if(isset($request->filePhoto)){
 		// 	$imageName = $products->id.'.'.$request->filePhoto->extension();
 		// 	$products->photo=$imageName;
@@ -157,7 +142,7 @@ class ProductController extends Controller
 		// 	$request->filePhoto->move(public_path('img'),$imageName);
 		// }
        //print_r($request->all());
-		//return back()->with('success','Created Successfully.');
+		return back()->with('success','Created Successfully.');
     }
 
     public static function variant_id($var = null, $product_id=null)
