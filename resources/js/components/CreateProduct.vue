@@ -91,7 +91,7 @@
             </div>
         </div>
 
-        <button @click="saveProduct" type="submit" class="btn btn-lg btn-primary">Save</button>
+        <button @click="saveProduct" type="submit"  class="btn btn-lg btn-primary">Save</button>
         <button type="button" class="btn btn-secondary btn-lg">Cancel</button>
     </section>
 </template>
@@ -100,6 +100,7 @@
 import vue2Dropzone from 'vue2-dropzone'
 import 'vue2-dropzone/dist/vue2Dropzone.min.css'
 import InputTag from 'vue-input-tag'
+import $ from 'jquery'
 
 export default {
     components: {
@@ -179,6 +180,7 @@ export default {
 
         // store product into database
         saveProduct() {
+         //alert()
             let product = {
                 title: this.product_name,
                 sku: this.product_sku,
@@ -188,15 +190,28 @@ export default {
                 product_variant_prices: this.product_variant_prices
             }
 
+            console.log("bEFORE AXIOS OK");
+            // $.ajax({
+            //     url: '/product',
+            //     method:"post",
+            //     data:{product:product} ,
+            //     success: function(res){
+            //      console.log(res);
+            //     }});
 
+                 
             axios.post('/product', product).then(response => {
                 console.log(response.data);
+                console.log("OK RES");
             }).catch(error => {
                 console.log(error);
+                console.log("NOT OK");
             })
 
-            console.log(product);
+           
         }
+
+
 
 
     },
