@@ -118,7 +118,7 @@ class ProductController extends Controller
             $variant_price->product_variant_one= ProductController::variant_id($color,  $product_last_id)[0]->id;
             $variant_price->product_variant_two= ProductController::variant_id($size,  $product_last_id)[0]->id;
             $variant_price->product_variant_three= ProductController::variant_id($style,  $product_last_id)[0]->id;
-            $variant_price->product_variant_three= ProductController::variant_id($style,  $product_last_id)[0]->id;
+
             $variant_price->price= $value['price'];
             $variant_price->stock= $value['stock'];
             $variant_price->created_at= now();
@@ -186,18 +186,36 @@ class ProductController extends Controller
      * @param \App\Models\Product $product
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Product $product)
+    public function update(Request $request, Product $product, ProductVariantPrice $productVariantPrice)
     {
-        print_r($request->all());
+        //print_r($request->id);
+
+        // $product=new Product;
+		$product->title=$request->title;
+        $product->sku=$request->sku;
+		$product->description=$request->description;
+
+        $product->created_at=now();
+        $product->updated_at=now();
         
-        // $products=new Product;
-		// $products->title=$request['title'];
-		// $products->description=$request['description'];
-		// $products->sku=$request['sku'];
-        // $products->created_at=now();
-        // $products->updated_at=now();
-        // $products->update();
-        // $product_last_id= $products->id;
+        $product->update();
+        $product_last_id= $product->id;
+
+        foreach ($request->id as $key => $value) {
+            $price=$request->price[$key];
+            $stock=$request->stock[$key];
+            $db=DB::Select("UPDATE product_variant_prices SET price = $price, stock = $stock
+            WHERE id=$value");
+  
+            //print_r($value);
+            //print_r($request->price[$key]);
+            //print_r($request->stock[$key]);
+   
+        }
+        
+        return redirect('product')->with('success','Updated Successfully.');
+
+        //echo "OK";
 
     }
 

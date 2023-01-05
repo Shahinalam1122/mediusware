@@ -100,25 +100,35 @@
                                 <tbody>
                                     <?php
                                         use App\Models\ProductVariant;
-                                        
+                                        $variant_name1="";
+                                        $variant_name2="";
+                                        $variant_name3="";
+
                                         //print_r($variant_name->variant);
 
                                         foreach ($product_variant_prices as $value) {
                                         
                                         //print_r($value);
-                                        $variant_name1=ProductVariant::find($value->product_variant_one)->variant;
-                                        $variant_name2=ProductVariant::find($value->product_variant_two)->variant;
-                                        $variant_name3=ProductVariant::find($value->product_variant_three)->variant;
+                                       
+                                            $variant_name1=ProductVariant::find($value->product_variant_one)->variant?? "";
+
+                                            $variant_name2=ProductVariant::find($value->product_variant_two)->variant?? "";
+                                       
+                                            $variant_name3=ProductVariant::find($value->product_variant_three)->variant?? "";
+                                      
+                                        
                                     ?>
-                                         {{-- id, product_variant_one, product_variant_two, product_variant_three, price, stock, product_id, created_at, updated_at --}}
+                                        
                                          
                                         <tr>
                                             <td>{{ $variant_name1 }}/{{ $variant_name2 }}/{{ $variant_name3 }}</td>
+
                                             <td>
-                                                <input type="text" class="form-control" value="{{ $value->price }}">
+                                                <input type="text" name="id[]" value="{{ $value->id }}" hidden/>
+                                                <input type="text" name="price[]" class="form-control" value="{{ $value->price }}">
                                             </td>
                                             <td>
-                                                <input type="text" class="form-control" value="{{ $value->stock }}">
+                                                <input type="text" name="stock[]" class="form-control" value="{{ $value->stock }}">
                                             </td>
                                         </tr>
 
