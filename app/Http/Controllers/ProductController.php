@@ -81,8 +81,6 @@ class ProductController extends Controller
 
             foreach ($value['tags'] as $value) {
 
-                //print_r($value);
-                
                 $variant=new ProductVariant();
 
                 $variant->variant=$value;
@@ -94,10 +92,6 @@ class ProductController extends Controller
                 $variant->save();
                 $varian_id=$variant->id;
 
-               
-               
-               // echo  $varian_id;
-
             }
            
         }
@@ -107,14 +101,12 @@ class ProductController extends Controller
         foreach ($variant_data_price as $key => $value) {
             $variant_price= new ProductVariantPrice();
 
-
             $str=$value['title'];
             $str=explode('/',$str,-1);
             $color=$str[0];
             $size=$str[1];
             $style=$str[2];
 
-           
             $variant_price->product_variant_one= ProductController::variant_id($color,  $product_last_id)[0]->id;
             $variant_price->product_variant_two= ProductController::variant_id($size,  $product_last_id)[0]->id;
             $variant_price->product_variant_three= ProductController::variant_id($style,  $product_last_id)[0]->id;
@@ -125,8 +117,6 @@ class ProductController extends Controller
             $variant_price->updated_at= now();
             $variant_price->product_id=$product_last_id;
             $variant_price->save();
-
-            print_r("ok");
 
         }
 
@@ -142,7 +132,7 @@ class ProductController extends Controller
 		// 	$request->filePhoto->move(public_path('img'),$imageName);
 		// }
        //print_r($request->all());
-		return back()->with('success','Created Successfully.');
+       return redirect('product')->with('success','Created Successfully.');
     }
 
     public static function variant_id($var = null, $product_id=null)
