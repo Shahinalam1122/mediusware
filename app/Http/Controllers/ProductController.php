@@ -22,12 +22,12 @@ class ProductController extends Controller
      */
     public function test(Request $request)
     {
-        $products='';
+        //$products='';
       //$s=DB::select("select * from products");
 
        if($request->titlesearch){
         $value=$request->titlesearch;
-        $products=DB::select("SELECT * FROM products where title like '%$value%'");
+        $products=DB::select("SELECT * FROM products where title like '$value%'");
        }
 
        if ($request->variant) {
