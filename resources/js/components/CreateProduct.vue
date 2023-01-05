@@ -26,6 +26,7 @@
                     <div class="card-body border">
                         <vue-dropzone ref="myVueDropzone" id="dropzone" :options="dropzoneOptions"></vue-dropzone>
                     </div>
+                   
                 </div>
             </div>
 
@@ -127,10 +128,10 @@ export default {
             ],
             product_variant_prices: [],
             dropzoneOptions: {
-                url: 'https://httpbin.org/post',
+                url: '/product',
                 thumbnailWidth: 150,
                 maxFilesize: 0.5,
-                headers: {"My-Awesome-Header": "header value"}
+                headers: { "X-CSRF-TOKEN": document.head.querySelector("[name=csrf-token]").content}
             }
         }
     },

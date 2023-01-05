@@ -8,10 +8,10 @@
 
 
 <div class="card">
-    <form action="" method="get" class="card-header">
+    <form action="/product" method="get" class="card-header">
         <div class="form-row justify-content-between">
             <div class="col-md-2">
-                <input type="text" name="title" placeholder="Product Title" class="form-control">
+                <input type="text" name="titlesearch" placeholder="Product Title" class="form-control">
             </div>
             <div class="col-md-2">
                 <select name="variant" id="" class="form-control">
@@ -29,11 +29,11 @@
                     ?>
 
                     <?php
-                    foreach ($product_variants as $value) {
+                    //foreach ($product_variants as $value) {
                     ?>
-                        <option value="{{ $value->id }}">{{ $value->variant }}</option>
+                        {{-- <option value="{{ $value->id }}">{{ $value->variant }}</option> --}}
                     <?php
-                    }
+                    //}
                     ?>
                 </select>
             </div>

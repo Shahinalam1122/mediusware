@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\ProductImage;
 use App\Models\ProductVariant;
 use App\Models\ProductVariantPrice;
 use App\Models\Variant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Pagination;
+
 
 class ProductController extends Controller
 {
@@ -17,7 +19,58 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Http\Response|\Illuminate\View\View
      */
-    public function index()
+    public function test(Request $request)
+    {
+        $products='';
+      //$s=DB::select("select * from products");
+
+       if($request->titlesearch){
+        $value=$request->titlesearch;
+        $products=DB::select("SELECT * FROM products where title like '%$value%'");
+       }
+
+       if ($request->variant) {
+        $value=$request->variant;
+        $products=DB::select("SELECT product_id FROM product_variants where variant_id='$value' group by product_id ");
+        foreach ($products as $key => $value) {
+            $id=$value->product_id;
+            $products=[];
+            $products[]=Product::find($id);
+           
+        }
+
+       }
+
+       if ($request->price_from && $request->price_to) {
+          $form=$request->price_from;
+          $to=$request->price_to;
+          $products=DB::select("SELECT product_id FROM product_variant_prices where price BETWEEN $form AND $to group by product_id ");
+
+          foreach ($products as $key => $value) {
+            $id=$value->product_id;
+            $products=[];
+            $products[]=Product::find($id);
+           }
+
+       
+       }
+
+
+    //    if ($request->date) {
+    //       $date=$request->date;
+    //       $s=DB::select("SELECT * FROM products where created_at > '$date 02:04:24'");
+        
+    //    }
+
+
+       print_r($products);
+      // print_r($s);
+    }
+       
+  
+
+      
+    public function index(Request $request)
     {
         // $products=DB::select('SELECT 
         // p.id id, p.title, p.description, p.created_at, v.title variant_type, pv.variant, pvp.price,pvp.stock
@@ -26,11 +79,52 @@ class ProductController extends Controller
         // and p.id=pvp.product_id
         // and v.id=pv.variant_id
         // and p.id=pvp.Product_id group by v.id');
+       
 
+        
+       
         $products=Product::all();
         $variants=Variant::all();
         $product_variants=ProductVariant::all();
-       
+
+        //-------------------------------------------------------------------------------
+
+        //$s=DB::select("select * from products");
+  
+         if($request->titlesearch){
+          $value=$request->titlesearch;
+          $products=DB::select("SELECT * FROM products where title like '%$value%'");
+         }
+  
+         if ($request->variant) {
+          $value=$request->variant;
+          $products=DB::select("SELECT product_id FROM product_variants where variant_id='$value' group by product_id ");
+          foreach ($products as $key => $value) {
+              $id=$value->product_id;
+              $products=[];
+              $products[]=Product::find($id);
+             
+          }
+  
+         }
+  
+         if ($request->price_from && $request->price_to) {
+            $form=$request->price_from;
+            $to=$request->price_to;
+            $products=DB::select("SELECT product_id FROM product_variant_prices where price BETWEEN '$form' AND '$to' group by product_id ");
+            
+            foreach ($products as $key => $value) {
+              $id=$value->product_id;
+              $products=[];
+              $products[]=Product::find($id);
+              
+             }
+             
+            // print_r($products);
+         }
+  
+      
+        
         return view('products.index', compact('products','variants','product_variants'));
         //print_r($products);
     }
@@ -120,10 +214,27 @@ class ProductController extends Controller
 
         }
 
-		// if(isset($request->filePhoto)){
-		// $products->photo=$request->filePhoto;
+		// if(isset($request->product_image)){
+		//  $products=$request->filePhoto;
+        //  print_r($products);
 		// }
 
+        // $imageName =time().'.'.$request->file->getClientOriginalExtension();
+        // $request->file->move(public_path('images'), $imageName);
+
+        // $image= new ProductImage();
+        // $image->product_id=$product_last_id;
+        // $image->public_path('images')/$imageName;
+        // $image->thumbnail=$imageName;
+        // $image->created_at=now();
+        // $image->updated_at=now();
+        // $image->save();
+        
+
+       
+
+
+        //return response()->json(['success'=>'You have successfully upload file.']);
 		
 		// if(isset($request->filePhoto)){
 		// 	$imageName = $products->id.'.'.$request->filePhoto->extension();
@@ -131,9 +242,22 @@ class ProductController extends Controller
 		// 	$products->update();
 		// 	$request->filePhoto->move(public_path('img'),$imageName);
 		// }
+<<<<<<< HEAD
        //print_r($request->all());
        return redirect('product')->with('success','Created Successfully.');
+=======
+       print_r($request->all());
+      // return redirect()->back()->with('success', 'Created Successfully');
+>>>>>>> edit
     }
+
+    // public function formSubmit(Request $request)
+    // {
+    // 	$imageName = time().'.'.$request->file->getClientOriginalExtension();
+    //     $request->file->move(public_path('images'), $imageName);
+         
+    // 	return response()->json(['success'=>'You have successfully upload file.']);
+    // }
 
     public static function variant_id($var = null, $product_id=null)
     {
