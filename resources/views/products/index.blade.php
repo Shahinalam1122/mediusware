@@ -29,11 +29,11 @@
                     ?>
 
                     <?php
-                    //foreach ($product_variants as $value) {
+                    foreach ($product_variants as $value) {
                     ?>
-                        {{-- <option value="{{ $value->id }}">{{ $value->variant }}</option> --}}
+                        <option value="{{ $value->id }}">{{ $value->variant }}</option>
                     <?php
-                    //}
+                    }
                     ?>
                 </select>
             </div>
@@ -43,8 +43,8 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text">Price Range</span>
                     </div>
-                    <input type="text" name="price_from" aria-label="First name" placeholder="From" class="form-control">
-                    <input type="text" name="price_to" aria-label="Last name" placeholder="To" class="form-control">
+                    <input type="text" name="price_from" value="" aria-label="First name" placeholder="From" class="form-control">
+                    <input type="text" name="price_to" value="" aria-label="Last name" placeholder="To" class="form-control">
                 </div>
             </div>
             <div class="col-md-2">
@@ -144,16 +144,21 @@
        
     </div>
 
+    
+
     <div class="card-footer">
         <div class="row justify-content-between">
             <div class="col-md-6">
-                <p>Showing 1 to 10 out of 100</p>
+                <p>Showing {{ $products->firstItem() }} to {{ $products->lastItem() }} out of {{$products->total()}}</p>
             </div>
             <div class="col-md-2">
-
+                
             </div>
+            {{ $products->links('pagination::bootstrap-4') }}
         </div>
+        
     </div>
+    
 </div>
 
 @endsection

@@ -6,6 +6,7 @@ use App\Models\Product;
 use App\Models\ProductImage;
 use App\Models\ProductVariant;
 use App\Models\ProductVariantPrice;
+use App\Models\User;
 use App\Models\Variant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -62,14 +63,11 @@ class ProductController extends Controller
         
     //    }
 
-
        print_r($products);
       // print_r($s);
     }
        
-  
 
-      
     public function index(Request $request)
     {
         // $products=DB::select('SELECT 
@@ -79,11 +77,17 @@ class ProductController extends Controller
         // and p.id=pvp.product_id
         // and v.id=pv.variant_id
         // and p.id=pvp.Product_id group by v.id');
-       
 
-        
+        $page    = $request->has('page') ? $request->get('page') : 1;
+        $total   = User::count();
+        $perPage = 10;
+        $showingTotal  = $page * $perPage;
+
+        $currentShowing = $showingTotal>$total ? $total : $showingTotal;
+        $showingStarted = $showingTotal - $perPage;
+        $tableInfo = "Showing $showingStarted to $showingTotal of $total";
        
-        $products=Product::all();
+        $products=Product::paginate(5);
         $variants=Variant::all();
         $product_variants=ProductVariant::all();
 
@@ -123,8 +127,6 @@ class ProductController extends Controller
             // print_r($products);
          }
   
-      
-        
         return view('products.index', compact('products','variants','product_variants'));
         //print_r($products);
     }
@@ -158,11 +160,9 @@ class ProductController extends Controller
         $products->save();
         $product_last_id= $products->id;
         
-
         $variant_data=$request['product_variant'];
         //print_r($variant_data);
         //print_r($variant_data[0]['tags']);
-
 
         $varian_id=[];
         
@@ -189,8 +189,7 @@ class ProductController extends Controller
             }
            
         }
-        
-       
+             
         $variant_data_price=$request['product_variant_prices'];
         foreach ($variant_data_price as $key => $value) {
             $variant_price= new ProductVariantPrice();
@@ -242,13 +241,9 @@ class ProductController extends Controller
 		// 	$products->update();
 		// 	$request->filePhoto->move(public_path('img'),$imageName);
 		// }
-<<<<<<< HEAD
        //print_r($request->all());
-       return redirect('product')->with('success','Created Successfully.');
-=======
-       print_r($request->all());
-      // return redirect()->back()->with('success', 'Created Successfully');
->>>>>>> edit
+       return redirect('/product')->with('success','Created Successfully.');
+       //return redirect('/product');
     }
 
     // public function formSubmit(Request $request)
